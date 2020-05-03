@@ -1,4 +1,4 @@
-# WIP: Backpack Media Library
+# WIP: Laravel Database Routing
 
 This package is a work in progress and is not production ready.
 
@@ -13,53 +13,27 @@ Upload and manage you media in Backpack for Laravel v4.
 
 ## Requirements
 
-- Laravel 6.x
-- Backpack 4.x
-- Tested with PHP 7.3 but may work below
+- Laravel >= 6.x
+- PHP >= 7.3
 
 ## Install
 
 Via Composer
 
 ``` bash
-$ composer require oddvalue/backpack-media-library
+$ composer require oddvalue/laravel-db-router
 ```
 
 Publish and migrate
 
 ```bash
-php artisan vendor:publish --provider "Oddvalue\BackpackMediaLibrary\BackpackMediaLibraryServiceProvider"
+php artisan vendor:publish --provider "Oddvalue\DbRouter\DbRouterServiceProvider"
 php artisan migrate
 ```
 
 ## Usage
 
-First add the trait to the model you wish to attach media to:
-
-```php
-use Oddvalue\BackpackMediaLibrary\Traits\HasMedia;
-```
-
-Add relation methods to the model:
-
-```php
-public function gallery()
-{
-    return $this->hasManyMedia();
-}
-
-public function image()
-{
-    return $this->hasOneMedia();
-}
-```
-
-Finally add fields to your model's CRUD controller:
-
-```php
-$this->crud->addField(MediaBrowserField::make('gallery'));
-$this->crud->addField(MediaBrowserField::make('image')->single());
-```
+#TODO
 
 ## Change log
 
@@ -88,17 +62,17 @@ If you discover any security related issues, please email jim@oddvalue.co.uk ins
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/oddvalue/backpack-media-library.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/oddvalue/laravel-db-router.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/oddvalue/backpack-media-library/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/oddvalue/backpack-media-library.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/oddvalue/backpack-media-library.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/oddvalue/backpack-media-library.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/oddvalue/laravel-db-router/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/oddvalue/laravel-db-router.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/oddvalue/laravel-db-router.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/oddvalue/laravel-db-router.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/oddvalue/backpack-media-library
-[link-travis]: https://travis-ci.org/oddvalue/backpack-media-library
-[link-scrutinizer]: https://scrutinizer-ci.com/g/oddvalue/backpack-media-library/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/oddvalue/backpack-media-library
-[link-downloads]: https://packagist.org/packages/oddvalue/backpack-media-library
+[link-packagist]: https://packagist.org/packages/oddvalue/laravel-db-router
+[link-travis]: https://travis-ci.org/oddvalue/laravel-db-router
+[link-scrutinizer]: https://scrutinizer-ci.com/g/oddvalue/laravel-db-router/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/oddvalue/laravel-db-router
+[link-downloads]: https://packagist.org/packages/oddvalue/laravel-db-router
 [link-author]: https://github.com/oddvalue
 [link-contributors]: ../../contributors
