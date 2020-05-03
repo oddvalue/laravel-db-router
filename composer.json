@@ -1,0 +1,59 @@
+{
+    "name": "oddvalue/laravel-db-router",
+    "type": "library",
+    "description": "Routing through the database in Laravel",
+    "keywords": [
+        "oddvalue",
+        "laravel-db-router"
+    ],
+    "homepage": "https://github.com/oddvalue/laravel-db-router",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jim Hollington",
+            "email": "jim@oddvalue.co.uk",
+            "homepage": "https://github.com/oddvalue",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "~7.3",
+        "laravel/framework": "~6",
+        "oddvalue/link-builder": "^1.0"
+    },
+    "require-dev": {
+        "codedungeon/phpunit-result-printer": "^0.27.0",
+        "orchestra/testbench": "^4.0",
+        "phpunit/phpunit": ">=7.0",
+        "squizlabs/php_codesniffer": "^3.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Oddvalue\\DbRouter\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Oddvalue\\DbRouter\\": "tests",
+            "Oddvalue\\DbRouter\\Test\\": "tests/app"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "check-style": "phpcs src tests",
+        "fix-style": "phpcbf src tests"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Oddvalue\\DbRouter\\DbRouterServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
