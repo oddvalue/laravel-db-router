@@ -13,6 +13,8 @@ This package is a work in progress and is not production ready.
 * 1. [Requirements](#Requirements)
 * 2. [Install](#Install)
 * 3. [Usage](#Usage)
+	* 3.1. [Preparing Your Model](#PreparingYourModel)
+	* 3.2. [Route Generators](#RouteGenerators)
 * 4. [Change log](#Changelog)
 * 5. [Testing](#Testing)
 * 6. [Contributing](#Contributing)
@@ -58,13 +60,13 @@ php artisan migrate
 
 ##  3. <a name='Usage'></a>Usage
 
-### Preparing Your Model
+###  3.1. <a name='PreparingYourModel'></a>Preparing Your Model
 
 In order to use this package your model must implement the [`\Oddvalue\DbRouter\Contracts\Routable`](src/Contracts/Routable.php) interface.
 
 Optionally, you may use the [`\Oddvalue\DbRouter\Traits\HasRoutes`](src/Traits/HasRoutes.php) trait to handle most of the interface implementation for you. Using the trait requires your model to have a `getRouteGeneratorClass` method that returns the fully qualified class name of the generator class for setting up the routes.
 
-### Route Generators
+###  3.2. <a name='RouteGenerators'></a>Route Generators
 
 The route generator class is responsible for getting the URLs that a model is accessible from and what controller action should be performed when that URL is hit. Generators must implement the `\Oddvalue\DbRouter\Contracts\RouteGenerator` interface. There is also a `\Oddvalue\DbRouter\Contracts\ChildRouteGenerator` interface. Once implemented this will allow the package to also generate and update routes for child pages of your model.
 
