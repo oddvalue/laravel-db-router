@@ -59,7 +59,8 @@ trait HasRoutes
      */
     public function canonicalRoute() : MorphOne
     {
-        return $this->morphOne(config('dbrouter.route_class'), 'routable')->whereIsCanonical();
+        return $this->/** @scrutinizer ignore-call */morphOne(config('dbrouter.route_class'), 'routable')
+            ->whereIsCanonical();
     }
 
     /**
@@ -69,7 +70,7 @@ trait HasRoutes
      */
     public function routes() : MorphMany
     {
-        return $this->morphMany(config('dbrouter.route_class'), 'routable');
+        return $this->/** @scrutinizer ignore-call */morphMany(config('dbrouter.route_class'), 'routable');
     }
 
     /**

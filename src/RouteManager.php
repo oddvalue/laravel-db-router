@@ -5,7 +5,6 @@ namespace Oddvalue\DbRouter;
 use Oddvalue\DbRouter\Route;
 use Illuminate\Database\QueryException;
 use Oddvalue\DbRouter\Contracts\Routable;
-use Oddvalue\DbRouter\Contracts\RouteGenerator;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Oddvalue\DbRouter\Contracts\ChildRouteGenerator;
 use Oddvalue\DbRouter\Exceptions\RouteCollisionException;
