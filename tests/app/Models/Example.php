@@ -5,6 +5,7 @@ namespace Oddvalue\DbRouter\Test\Models;
 use Illuminate\Database\Eloquent\Model;
 use Oddvalue\DbRouter\Traits\HasRoutes;
 use Oddvalue\DbRouter\Contracts\Routeable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Oddvalue\DbRouter\Test\Links\ExampleLink;
 use Oddvalue\LinkBuilder\Traits\LinkableTrait;
 use Oddvalue\DbRouter\Test\Routes\ExampleRouteGenerator;
@@ -13,6 +14,7 @@ class Example extends Model implements Routeable
 {
     use HasRoutes;
     use LinkableTrait;
+    use SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -39,6 +41,11 @@ class Example extends Model implements Routeable
     public function getRouteGeneratorClass()
     {
         return ExampleRouteGenerator::class;
+    }
+
+    public function isRouteable()
+    {
+        return ! $this->trashed();
     }
 
     /**

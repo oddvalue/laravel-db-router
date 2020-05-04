@@ -23,13 +23,14 @@ class RouteManager
     {
         $this->deleteRoutes($instance);
 
-        if (method_exists('trashed', $instance) && $instance->trashed()) {
+        $generator = $instance->getRouteGenerator();
+
+        if (! $generator->isRouteable()) {
             return;
         }
 
         $this->addRoutes($instance);
 
-        $generator = $instance->getRouteGenerator();
         if ($generator instanceof ChildRouteGenerator) {
             $generator->getRouteChildren()->map(function ($childInstance) {
                 $this->updateRoutes($childInstance);

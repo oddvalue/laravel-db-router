@@ -36,6 +36,8 @@ class RouteableModelEventsTest extends TestCase
     public function testRouteDeletion()
     {
         $this->routeableInstance->delete();
-        $this->assertEquals(Route::count(), 0);
+        $this->assertEquals(0, Route::count());
+        $this->routeableInstance->update(['name' => 'Bar']);
+        $this->assertEquals(0, Route::count());
     }
 }
