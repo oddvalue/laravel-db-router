@@ -56,8 +56,13 @@ class RedirectionTest extends TestCase
 
         RouteManager::createRedirect('/baz', $exampleInstance->canonicalRoute);
 
+        // Assert that there are 2 routes in the database
         $this->assertEquals(2, Route::count());
+        // Assert that there are 3 routes in the database including trashed
         $this->assertEquals(3, Route::withTrashed()->count());
+        // Assert that 2 of those 3 routes are redirects
         $this->assertEquals(2, Route::isRedirect()->count());
+        // Assert that the example instance has 1 redirect route related to it
+        $this->assertEquals(1, $exampleInstance->redirectRoutes()->count());
     }
 }

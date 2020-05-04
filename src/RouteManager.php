@@ -32,7 +32,7 @@ class RouteManager
         $this->addRoutes($instance);
 
         if ($generator instanceof ChildRouteGenerator) {
-            $generator->getRouteChildren()->map(function ($childInstance) {
+            $generator->getRouteChildren($instance)->map(function ($childInstance) {
                 $this->updateRoutes($childInstance);
             });
         }
@@ -81,6 +81,13 @@ class RouteManager
     public function deleteRoutes(Routable $instance)
     {
         $instance->routes()->delete();
+
+        $generator = $instance->getRouteGenerator();
+        if ($generator instanceof ChildRouteGenerator) {
+            $generator->getRouteChildren($instance)->map(function ($childInstance) {
+                $this->deleteRoutes($childInstance);
+            });
+        }
     }
 
     /**

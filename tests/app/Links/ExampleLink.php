@@ -29,11 +29,11 @@ class ExampleLink implements LinkGenerator
      */
     public function href() : string
     {
-        return '/'.collect($this->model->slug)->when(key_exists('prefix', $this->options), function ($href) {
+        return '/'.trim(collect($this->model->slug)->when(key_exists('prefix', $this->options), function ($href) {
             return $href->prepend($this->options['prefix']);
-        })->when(key_exists('parent', $this->options), function ($href) {
-            return $href->prepend($this->options['parent']->getLinkGenerator()->href());
-        })->implode('/');
+        })->when($this->model->parent, function ($href) {
+            return $href->prepend($this->model->parent->getLinkGenerator()->href());
+        })->implode('/'), '/');
     }
 
     /**
