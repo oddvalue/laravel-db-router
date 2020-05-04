@@ -2,12 +2,14 @@
 
 namespace Oddvalue\DbRouter\Test\Routes;
 
+use Illuminate\Support\Collection;
 use Oddvalue\DbRouter\RouteGenerator;
-use Oddvalue\DbRouter\Contracts\Routeable;
+use Oddvalue\DbRouter\Contracts\Routable;
+use Oddvalue\DbRouter\Contracts\ChildRouteGenerator;
 
-class ExampleRouteGenerator extends RouteGenerator
+class ExampleRouteGenerator extends RouteGenerator implements ChildRouteGenerator
 {
-    public function getRoutes(Routeable $instance)
+    public function getRoutes(Routable $instance)
     {
         $routes =  [
             $instance->getLinkGenerator()->href(),
@@ -18,6 +20,11 @@ class ExampleRouteGenerator extends RouteGenerator
         }
 
         return $routes;
+    }
+
+    public function getRouteChildren(Routable $instance) : Collection
+    {
+        return $instance->children;
     }
 
     public function getRouteController() : string

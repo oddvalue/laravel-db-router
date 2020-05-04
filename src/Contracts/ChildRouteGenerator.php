@@ -3,9 +3,9 @@
 namespace Oddvalue\DbRouter\Contracts;
 
 use Illuminate\Support\Collection;
-use Oddvalue\DbRouter\Contracts\Routeable;
+use Oddvalue\DbRouter\Contracts\Routable;
 
 interface ChildRouteGenerator
 {
-    public function getRouteChildren(Routeable $instance) : Collection;
+    public function getRouteChildren(Routable $instance) : Collection;
 }

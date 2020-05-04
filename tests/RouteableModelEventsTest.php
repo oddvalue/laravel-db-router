@@ -5,15 +5,15 @@ namespace Oddvalue\DbRouter;
 use Oddvalue\DbRouter\Route;
 use Oddvalue\DbRouter\Test\Models\Example;
 
-class RouteableModelEventsTest extends TestCase
+class RoutableModelEventsTest extends TestCase
 {
-    protected $routeableInstance;
+    protected $routableInstance;
 
     public function setUp() : void
     {
         parent::setUp();
 
-        $this->routeableInstance = Example::create([
+        $this->routableInstance = Example::create([
             'name' => 'Foo',
             'slug' => 'foo',
         ]);
@@ -22,7 +22,7 @@ class RouteableModelEventsTest extends TestCase
     public function testRouteCreation()
     {
         $dbRoute = Route::first();
-        $expectedUrl = $dbRoute->parseUrl($this->routeableInstance->getLinkGenerator()->href());
+        $expectedUrl = $dbRoute->parseUrl($this->routableInstance->getLinkGenerator()->href());
         $this->assertEquals($expectedUrl, $dbRoute->url);
     }
 
@@ -35,9 +35,9 @@ class RouteableModelEventsTest extends TestCase
 
     public function testRouteDeletion()
     {
-        $this->routeableInstance->delete();
+        $this->routableInstance->delete();
         $this->assertEquals(0, Route::count());
-        $this->routeableInstance->update(['name' => 'Bar']);
+        $this->routableInstance->update(['name' => 'Bar']);
         $this->assertEquals(0, Route::count());
     }
 }

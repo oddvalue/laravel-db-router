@@ -4,13 +4,13 @@ namespace Oddvalue\DbRouter\Test\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Oddvalue\DbRouter\Traits\HasRoutes;
-use Oddvalue\DbRouter\Contracts\Routeable;
+use Oddvalue\DbRouter\Contracts\Routable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Oddvalue\DbRouter\Test\Links\ExampleLink;
 use Oddvalue\LinkBuilder\Traits\LinkableTrait;
 use Oddvalue\DbRouter\Test\Routes\ExampleRouteGenerator;
 
-class Example extends Model implements Routeable
+class Example extends Model implements Routable
 {
     use HasRoutes;
     use LinkableTrait;
@@ -43,7 +43,7 @@ class Example extends Model implements Routeable
         return ExampleRouteGenerator::class;
     }
 
-    public function isRouteable()
+    public function isRoutable() : bool
     {
         return ! $this->trashed();
     }

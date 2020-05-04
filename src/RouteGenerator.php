@@ -2,12 +2,12 @@
 
 namespace Oddvalue\DbRouter;
 
-use Oddvalue\DbRouter\Contracts\Routeable;
+use Oddvalue\DbRouter\Contracts\Routable;
 use Oddvalue\DbRouter\Contracts\RouteGenerator as RouteGeneratorContract;
 
 abstract class RouteGenerator implements RouteGeneratorContract
 {
-    public function getRoutes(Routeable $instance)
+    public function getRoutes(Routable $instance)
     {
         return [$instance->getLinkGenerator()->href()];
     }

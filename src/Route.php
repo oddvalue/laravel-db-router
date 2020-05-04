@@ -30,7 +30,7 @@ class Route extends Model
 
     public function shouldRedirect() : bool
     {
-        return $this->redirect || ($this->trashed() && $this->routeable);
+        return $this->redirect || ($this->trashed() && $this->routable);
     }
 
     public function isCanonical() : bool
@@ -48,7 +48,7 @@ class Route extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function routeable()
+    public function routable()
     {
         return $this->morphTo();
     }
@@ -101,8 +101,8 @@ class Route extends Model
 
     public function getRedirectUrlAttribute()
     {
-        if ($this->routeable && $this->trashed() && $this->routeable->canonicalRoute) {
-            return $this->routeable->canonicalRoute->url;
+        if ($this->routable && $this->trashed() && $this->routable->canonicalRoute) {
+            return $this->routable->canonicalRoute->url;
         }
 
         if ($this->redirect) {

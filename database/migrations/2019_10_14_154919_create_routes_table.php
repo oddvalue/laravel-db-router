@@ -16,9 +16,7 @@ class CreateRoutesTable extends Migration
         Schema::create('routes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('url', 500)->unique()->index();
-            $table->nullableMorphs('routeable');
-            $table->string('controller')->nullable();
-            $table->string('action')->nullable();
+            $table->nullableMorphs('routable');
             $table->unsignedInteger('canonical_id')->nullable()
                 ->references('id')->on('routes');
             $table->unsignedInteger('redirect_id')->nullable()

@@ -6,15 +6,8 @@ use Oddvalue\LinkBuilder\Contracts\Linkable;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-interface Routeable extends Linkable
+interface Routable extends Linkable
 {
-    /**
-     * Should the model be available on the frontend
-     *
-     * @return boolean
-     */
-    public function isRouteable() : bool;
-
     /**
      * Get the model's route generator
      *

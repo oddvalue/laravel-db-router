@@ -25,7 +25,7 @@ class DbRouterController extends Controller
 
         $controller = app($route->controller);
 
-        $parameters = $this->resolveClassMethodDependencies([$route->routeable], $controller, $route->action);
+        $parameters = $this->resolveClassMethodDependencies([$route->routable], $controller, $route->action);
 
         if (method_exists($controller, 'callAction')) {
             return $controller->callAction($route->action, $parameters);

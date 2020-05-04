@@ -4,7 +4,7 @@ namespace Oddvalue\DbRouter;
 
 use Oddvalue\DbRouter\Route;
 use Illuminate\Database\QueryException;
-use Oddvalue\DbRouter\Contracts\Routeable;
+use Oddvalue\DbRouter\Contracts\Routable;
 use Oddvalue\DbRouter\Contracts\RouteGenerator;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Oddvalue\DbRouter\Contracts\ChildRouteGenerator;
@@ -17,15 +17,15 @@ class RouteManager
      * descendants and insert new path for self and all descendants
      * By default only the primary entity types have Routes
      *
-     * @param Oddvalue\DbRouter\Contracts\Routeable $instance
+     * @param Oddvalue\DbRouter\Contracts\Routable $instance
      */
-    public function updateRoutes(Routeable $instance)
+    public function updateRoutes(Routable $instance)
     {
         $this->deleteRoutes($instance);
 
         $generator = $instance->getRouteGenerator();
 
-        if (! $generator->isRouteable()) {
+        if (! $generator->isRoutable($instance)) {
             return;
         }
 
@@ -41,7 +41,7 @@ class RouteManager
     /**
      * Create new Route OR restore old path if already exists
      */
-    public function addRoutes(Routeable $instance)
+    public function addRoutes(Routable $instance)
     {
         try {
             $routes = collect($instance->getRouteGenerator()->getRoutes($instance));
@@ -57,11 +57,11 @@ class RouteManager
         }
     }
 
-    public function createOrRestoreRoute(string $routeString, Routeable $instance, int $canonicalId = null)
+    public function createOrRestoreRoute(string $routeString, Routable $instance, int $canonicalId = null)
     {
         $type = get_class($instance);
         $type = Relation::getMorphedModel($type) ?? $type;
-        Route::onlyTrashed()->whereHasMorph('routeable', $type, function ($query) use ($instance) {
+        Route::onlyTrashed()->whereHasMorph('routable', $type, function ($query) use ($instance) {
             $query->where($instance->getKeyName(), $instance->id);
         })->whereUrl($routeString)->forceDelete();
 
@@ -80,7 +80,7 @@ class RouteManager
     /**
      * Delete existing Route instances for an entity
      */
-    public function deleteRoutes(Routeable $instance)
+    public function deleteRoutes(Routable $instance)
     {
         $instance->routes()->delete();
     }

@@ -3,7 +3,7 @@
 namespace Oddvalue\DbRouter\Traits;
 
 use Oddvalue\DbRouter\RouteManager;
-use Oddvalue\DbRouter\Contracts\Routeable;
+use Oddvalue\DbRouter\Contracts\Routable;
 use Oddvalue\DbRouter\Contracts\RouteGenerator;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -20,7 +20,7 @@ trait HasRoutes
         /**
          * Update routes after instance is saved
          */
-        static::saved(function (Routeable $model) {
+        static::saved(function (Routable $model) {
             $manager = new RouteManager;
             $manager->updateRoutes($model);
         });
@@ -28,18 +28,11 @@ trait HasRoutes
         /**
          * Delete routes after instance is deleted
          */
-        static::deleted(function (Routeable $model) {
+        static::deleted(function (Routable $model) {
             $manager = new RouteManager;
             $manager->deleteRoutes($model);
         });
     }
-
-    /**
-     * Should the model be available on the frontend
-     *
-     * @return boolean
-     */
-    abstract public function isRouteable() : bool;
 
     /**
      * Get the fully qualified class name of the model's route generator
@@ -66,7 +59,7 @@ trait HasRoutes
      */
     public function canonicalRoute() : MorphOne
     {
-        return $this->morphOne(config('dbrouter.route_class'), 'routeable')->whereIsCanonical();
+        return $this->morphOne(config('dbrouter.route_class'), 'routable')->whereIsCanonical();
     }
 
     /**
@@ -76,7 +69,7 @@ trait HasRoutes
      */
     public function routes() : MorphMany
     {
-        return $this->morphMany(config('dbrouter.route_class'), 'routeable');
+        return $this->morphMany(config('dbrouter.route_class'), 'routable');
     }
 
     /**
