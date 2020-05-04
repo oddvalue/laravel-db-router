@@ -14,7 +14,6 @@ class RouteManager
     /**
      * If the slug has changed then softdelete current path for self and all
      * descendants and insert new path for self and all descendants
-     * By default only the primary entity types have Routes
      *
      * @param \Oddvalue\DbRouter\Contracts\Routable $instance
      */
