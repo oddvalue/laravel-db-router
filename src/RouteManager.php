@@ -17,7 +17,7 @@ class RouteManager
      * descendants and insert new path for self and all descendants
      * By default only the primary entity types have Routes
      *
-     * @param Oddvalue\DbRouter\Contracts\Routable $instance
+     * @param \Oddvalue\DbRouter\Contracts\Routable $instance
      */
     public function updateRoutes(Routable $instance)
     {
@@ -62,10 +62,10 @@ class RouteManager
         $type = get_class($instance);
         $type = Relation::getMorphedModel($type) ?? $type;
         Route::onlyTrashed()->whereHasMorph('routable', $type, function ($query) use ($instance) {
-            $query->where($instance->getKeyName(), $instance->id);
+            $keyName = $instance->/** @scrutinizer ignore-call */getKeyName();
+            $query->where($keyName, $instance->{$keyName});
         })->whereUrl($routeString)->forceDelete();
 
-        $generator = $instance->getRouteGenerator();
         $path = $instance->routes()->withTrashed()->firstOrCreate([
             'url' => $routeString,
             'canonical_id' => $canonicalId,
