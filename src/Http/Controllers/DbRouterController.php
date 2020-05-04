@@ -4,6 +4,7 @@ namespace Oddvalue\DbRouter\Http\Controllers;
 
 use Oddvalue\DbRouter\Route;
 use Illuminate\Routing\Controller;
+use Oddvalue\DbRouter\Contracts\Routable;
 use Illuminate\Routing\RouteDependencyResolverTrait;
 
 class DbRouterController extends Controller
@@ -23,23 +24,29 @@ class DbRouterController extends Controller
             return $this->redirect($route);
         }
 
-        $controller = app($route->controller);
+        $routableInstance = $route->routable;
+        [$controller, $action] = $this->getRouteAction($routableInstance);
 
-        $parameters = $this->resolveClassMethodDependencies([$route->routable], $controller, $route->action);
+        $parameters = $this->resolveClassMethodDependencies([$routableInstance], $controller, $action);
 
         if (method_exists($controller, 'callAction')) {
-            return $controller->callAction($route->action, $parameters);
+            return $controller->callAction($action, $parameters);
         }
 
-        return $controller->{$route->action}(...array_values($parameters));
+        return $controller->{$action}(...array_values($parameters));
     }
 
     protected function redirect($route)
     {
-        if (! $route->shouldRedirect()) {
-            throw new NotFoundHttpException("No route for url '{$url}'");
-        }
-
         return redirect($route->redirect_url, 301);
+    }
+
+    protected function getRouteAction(Routable $routableInstance)
+    {
+        $generator = $routableInstance->getRouteGenerator();
+        return [
+            app($generator->getRouteController($routableInstance)),
+            $generator->getRouteAction($routableInstance),
+        ];
     }
 }

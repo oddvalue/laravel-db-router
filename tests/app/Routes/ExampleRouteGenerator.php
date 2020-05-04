@@ -9,11 +9,9 @@ use Oddvalue\DbRouter\Contracts\ChildRouteGenerator;
 
 class ExampleRouteGenerator extends RouteGenerator implements ChildRouteGenerator
 {
-    public function getRoutes(Routable $instance)
+    public function getRoutes(Routable $instance) : array
     {
-        $routes =  [
-            $instance->getLinkGenerator()->href(),
-        ];
+        $routes = parent::getRoutes($instance);
 
         if ($instance->getNonCanonicalRoutePrefix()) {
             $routes[] = $instance->getLinkGenerator(['prefix' => $instance->getNonCanonicalRoutePrefix()])->href();
@@ -22,17 +20,22 @@ class ExampleRouteGenerator extends RouteGenerator implements ChildRouteGenerato
         return $routes;
     }
 
+    public function isRoutable(Routable $instance) : bool
+    {
+        return ! $instance->trashed();
+    }
+
     public function getRouteChildren(Routable $instance) : Collection
     {
         return $instance->children;
     }
 
-    public function getRouteController() : string
+    public function getRouteController(Routable $instance) : string
     {
         return \Oddvalue\DbRouter\Test\Http\Controllers\ExampleController::class;
     }
 
-    public function getRouteAction() : string
+    public function getRouteAction(Routable $instance) : string
     {
         return 'show';
     }

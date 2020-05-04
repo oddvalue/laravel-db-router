@@ -69,8 +69,6 @@ class RouteManager
         $path = $instance->routes()->withTrashed()->firstOrCreate([
             'url' => $routeString,
             'canonical_id' => $canonicalId,
-            'controller' => $generator->getRouteController(),
-            'action' => $generator->getRouteAction(),
         ]);
         $path->restore();
 

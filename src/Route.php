@@ -17,8 +17,6 @@ class Route extends Model
     */
     protected $fillable = [
         'url',
-        'controller',
-        'action',
         'canonical_id',
     ];
 
