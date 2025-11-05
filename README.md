@@ -39,9 +39,9 @@ Features include:
 
 ## <a name='Requirements'></a>Requirements
 
-- PHP >= 7.3
-- Laravel >= 6.x
-- [oddvalue/link-builder](https://github.com/oddvalue/link-builder) >= 1.0.0
+- PHP >= 8.2
+- Laravel 12.x
+- [oddvalue/link-builder](https://github.com/oddvalue/link-builder) >= 2.0.0
 
 ## <a name='Install'></a>Install
 

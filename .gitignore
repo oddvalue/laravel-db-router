@@ -3,3 +3,4 @@ composer.lock
 /build/
 .phpunit.result.cache
 node_modules
+.idea

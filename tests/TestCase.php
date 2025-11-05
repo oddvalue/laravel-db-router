@@ -18,8 +18,6 @@ class TestCase extends OrchestraTestCase
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->artisan('migrate', ['--database' => 'testing'])->run();
-
-        $this->withFactories(__DIR__ . '/database/factories');
     }
 
     /**

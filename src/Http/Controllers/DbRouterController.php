@@ -5,12 +5,9 @@ namespace Oddvalue\DbRouter\Http\Controllers;
 use Oddvalue\DbRouter\Route;
 use Illuminate\Routing\Controller;
 use Oddvalue\DbRouter\Contracts\Routable;
-use Illuminate\Routing\RouteDependencyResolverTrait;
 
 class DbRouterController extends Controller
 {
-    use RouteDependencyResolverTrait;
-
     public function __invoke($url)
     {
         return $this->resolveRoute("/$url");
@@ -27,13 +24,9 @@ class DbRouterController extends Controller
         $routableInstance = $route->routable;
         [$controller, $action] = $this->getRouteAction($routableInstance);
 
-        $parameters = $this->resolveClassMethodDependencies([$routableInstance], $controller, $action);
-
-        if (method_exists($controller, 'callAction')) {
-            return $controller->callAction($action, $parameters);
-        }
-
-        return $controller->{$action}(...array_values($parameters));
+        return app()->call([$controller, $action], [
+            'model' => $routableInstance,
+        ]);
     }
 
     protected function redirect($route)
