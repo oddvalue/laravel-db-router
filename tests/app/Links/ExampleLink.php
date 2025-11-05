@@ -41,19 +41,30 @@ class ExampleLink implements LinkGenerator
      *
      * @return string
      */
-    public function label() : string {}
+    public function label() : string
+    {
+        return (string) ($this->model->name ?? last((array) $this->model->slug) ?? '');
+    }
 
     /**
      * Generate an HTML link for the model
      *
      * @return string
      */
-    public function toHtml() {}
+    public function toHtml()
+    {
+        $href = $this->href();
+        $label = $this->label();
+        return '<a href="' . e($href) . '">' . e($label) . '</a>';
+    }
 
     /**
      * Cast the generator to a string
      *
      * @return string
      */
-    public function __toString() : string {}
+    public function __toString() : string
+    {
+        return $this->href();
+    }
 }

@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["8.2", "8.3", "8.4"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: xdebug
+          extensions: mbstring, dom, sqlite3
+          ini-values: memory_limit=512M
+          tools: composer:v2
+      - name: Validate composer.json and composer.lock
+        run: composer validate --no-interaction
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+      - name: Run tests (Pest)
+        run: vendor/bin/pest
+      - name: Generate coverage (only on main, PHP 8.3)
+        if: github.ref == 'refs/heads/main' && matrix.php == '8.3' && github.event_name == 'push'
+        run: |
+          vendor/bin/pest --coverage-clover=coverage.xml
+      - name: Build coverage badge JSON (only on main, PHP 8.3)
+        if: github.ref == 'refs/heads/main' && matrix.php == '8.3' && github.event_name == 'push'
+        shell: bash
+        run: |
+          set -e
+          mkdir -p coverage
+          # Parse Clover XML for statements and coveredstatements
+          STATS_LINE=$(grep -o '<metrics[^>]*/>' coverage.xml | head -n1)
+          if [ -z "$STATS_LINE" ]; then
+            echo "Could not parse coverage.xml metrics" >&2
+            exit 1
+          fi
+          TOTAL=$(echo "$STATS_LINE" | sed -n 's/.*statements="\([0-9]\+\)".*/\1/p')
+          COVERED=$(echo "$STATS_LINE" | sed -n 's/.*coveredstatements="\([0-9]\+\)".*/\1/p')
+          if [ -z "$TOTAL" ] || [ -z "$COVERED" ] || [ "$TOTAL" -eq 0 ]; then
+            PCT=0
+          else
+            PCT=$(awk -v c=$COVERED -v t=$TOTAL 'BEGIN { printf "%.1f", (c/t)*100 }')
+          fi
+          # Choose color based on percentage
+          COLOR=red
+          PCT_INT=$(printf '%.*f\n' 0 "$PCT")
+          if [ "$PCT_INT" -ge 90 ]; then COLOR=brightgreen; elif [ "$PCT_INT" -ge 80 ]; then COLOR=green; elif [ "$PCT_INT" -ge 70 ]; then COLOR=yellow; elif [ "$PCT_INT" -ge 60 ]; then COLOR=orange; else COLOR=red; fi
+          # Write Shields.io endpoint JSON
+          cat > coverage/coverage.json <<JSON
+          {"schemaVersion":1,"label":"coverage","message":"${PCT}%","color":"${COLOR}"}
+          JSON
+      - name: Commit coverage badge JSON
+        if: github.ref == 'refs/heads/main' && matrix.php == '8.3' && github.event_name == 'push'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          if git diff --quiet -- coverage/coverage.json 2>/dev/null; then
+            echo "No coverage JSON changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add coverage/coverage.json
+          git commit -m "chore(ci): update coverage badge [skip ci]"
+          git push
+      - name: Code style
+        run: composer check-style

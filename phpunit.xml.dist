@@ -3,7 +3,6 @@
          backupGlobals="false"
          backupStaticAttributes="false"
          colors="true"
-         printerClass="Codedungeon\PHPUnitPrettyResultPrinter\Printer"
          verbose="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
