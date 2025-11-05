@@ -1,50 +1,35 @@
 <?php
 
-namespace Oddvalue\DbRouter;
-
 use Oddvalue\DbRouter\Route;
 use Oddvalue\DbRouter\Test\Models\Example;
 
-class CanonicalTest extends TestCase
-{
-    public function setUp() : void
-    {
-        parent::setUp();
+beforeEach(function () {
+    Example::make([
+        'name' => 'Foo',
+        'slug' => 'foo',
+    ])->setNonCanonicalRoutePrefix('bar')->save();
+});
 
-        Example::make([
-            'name' => 'Foo',
-            'slug' => 'foo',
-        ])->setNonCanonicalRoutePrefix('bar')->save();
-    }
+it('scopes canonical routes', function () {
+    expect(Route::whereIsCanonical()->count())->toBe(1);
+});
 
-    public function testCanonicalScope()
-    {
-        $expectedCanonicalCount = 1;
-        $actualCanonicalCount = Route::whereIsCanonical()->count();
+it('determines routes are canonical', function () {
+    $count = Route::all()->filter(function ($route) {
+        return $route->isCanonical();
+    })->count();
 
-        $this->assertEquals($expectedCanonicalCount, $actualCanonicalCount);
-    }
+    expect($count)->toBe(1);
+});
 
-    public function testIsCanonical()
-    {
-        $expectedCount = 1;
-        $actualNonCanonicalRouteCount = Route::all()->filter(function ($route) {
-            return $route->isCanonical();
-        })->count();
+it('relates canonical and non-canonical correctly', function () {
+    $expectedNonCanonicalUrl = '/bar/foo';
+    $expectedCanonicalUrl = '/foo';
 
-        $this->assertEquals($expectedCount, $actualNonCanonicalRouteCount);
-    }
+    $nonCanonicalRoute = Route::all()->first(function ($route) {
+        return $route->isCanonical();
+    });
 
-    public function testCanonicalRelation()
-    {
-        $expectedNonCanonicalUrl = '/bar/foo';
-        $expectedCanonicalUrl = '/foo';
-
-        $nonCanonicalRoute = Route::all()->first(function ($route) {
-            return $route->isCanonical();
-        });
-
-        $this->assertEquals($expectedNonCanonicalUrl, $nonCanonicalRoute->url);
-        $this->assertEquals($expectedCanonicalUrl, $nonCanonicalRoute->canonical->url);
-    }
-}
+    expect($nonCanonicalRoute->url)->toBe($expectedNonCanonicalUrl);
+    expect($nonCanonicalRoute->canonical->url)->toBe($expectedCanonicalUrl);
+});

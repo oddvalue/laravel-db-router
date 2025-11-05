@@ -2,22 +2,14 @@
 
 namespace Oddvalue\DbRouter;
 
-use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
 class DbRouterServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = true;
-
-    /**
      * Bootstrap the application services.
      */
-    public function boot()
+    public function boot(): void
     {
         // publish the migrations and seeds
         $this->publishes([__DIR__.'/../database/migrations/' => database_path('migrations')], 'migrations');
@@ -28,7 +20,7 @@ class DbRouterServiceProvider extends ServiceProvider
     /**
      * Register the application services.
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'dbrouter');
     }

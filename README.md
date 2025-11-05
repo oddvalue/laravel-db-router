@@ -4,9 +4,8 @@ This package is a work in progress and is not production ready.
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
-[![Build Status][ico-travis]][link-travis]
-[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
-[![Quality Score][ico-code-quality]][link-code-quality]
+[![CI][ico-ci]][link-ci]
+[![Coverage][ico-coverage]][link-coverage]
 [![Total Downloads][ico-downloads]][link-downloads]
 
 <!-- vscode-markdown-toc -->
@@ -39,9 +38,9 @@ Features include:
 
 ## <a name='Requirements'></a>Requirements
 
-- PHP >= 7.3
-- Laravel >= 6.x
-- [oddvalue/link-builder](https://github.com/oddvalue/link-builder) >= 1.0.0
+- PHP >= 8.2
+- Laravel 12.x
+- [oddvalue/link-builder](https://github.com/oddvalue/link-builder) >= 2.0.0
 
 ## <a name='Install'></a>Install
 
@@ -103,15 +102,13 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 [ico-version]: https://img.shields.io/packagist/v/oddvalue/laravel-db-router.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/oddvalue/laravel-db-router/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/oddvalue/laravel-db-router.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/oddvalue/laravel-db-router.svg?style=flat-square
+[ico-ci]: https://github.com/oddvalue/laravel-db-router/actions/workflows/ci.yml/badge.svg
 [ico-downloads]: https://img.shields.io/packagist/dt/oddvalue/laravel-db-router.svg?style=flat-square
+[ico-coverage]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/oddvalue/laravel-db-router/main/coverage/coverage.json&label=coverage
 
 [link-packagist]: https://packagist.org/packages/oddvalue/laravel-db-router
-[link-travis]: https://travis-ci.org/oddvalue/laravel-db-router
-[link-scrutinizer]: https://scrutinizer-ci.com/g/oddvalue/laravel-db-router/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/oddvalue/laravel-db-router
+[link-ci]: https://github.com/oddvalue/laravel-db-router/actions/workflows/ci.yml
+[link-coverage]: https://github.com/oddvalue/laravel-db-router/actions/workflows/ci.yml
 [link-downloads]: https://packagist.org/packages/oddvalue/laravel-db-router
 [link-author]: https://github.com/oddvalue
 [link-contributors]: ../../contributors

@@ -38,7 +38,7 @@ class Example extends Model implements Routable
         return $this->hasMany(static::class, 'parent_id');
     }
 
-    public function getRouteGeneratorClass()
+    public function getRouteGeneratorClass(): string
     {
         return ExampleRouteGenerator::class;
     }
@@ -53,7 +53,7 @@ class Example extends Model implements Routable
      *
      * @return string
      */
-    protected function getLinkGeneratorClass()
+    protected function getLinkGeneratorClass(): string
     {
         return ExampleLink::class;
     }
