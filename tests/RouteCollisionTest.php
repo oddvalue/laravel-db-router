@@ -1,25 +1,16 @@
 <?php
 
-namespace Oddvalue\DbRouter;
-
-use Oddvalue\DbRouter\Route;
 use Oddvalue\DbRouter\Test\Models\Example;
 use Oddvalue\DbRouter\Exceptions\RouteCollisionException;
 
-class RouteCollisionTest extends TestCase
-{
-    public function testRouteCollision()
-    {
-        $this->expectException(RouteCollisionException::class);
+it('throws route collision when creating duplicate slug', function () {
+    Example::create([
+        'name' => 'Foo',
+        'slug' => 'foo',
+    ]);
 
-        Example::create([
-            'name' => 'Foo',
-            'slug' => 'foo',
-        ]);
-
-        Example::create([
-            'name' => 'Bar',
-            'slug' => 'foo',
-        ]);
-    }
-}
+    expect(fn () => Example::create([
+        'name' => 'Bar',
+        'slug' => 'foo',
+    ]))->toThrow(RouteCollisionException::class);
+});
