@@ -14,3 +14,6 @@ parameters:
     - identifier: missingType.generics
       path: src/Route.php
       message: '#return type with generic class#'
+    - identifier: missingType.generics
+      path: src/Route.php
+      message: '#uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory#'

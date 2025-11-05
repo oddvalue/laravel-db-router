@@ -2,6 +2,7 @@
 
 namespace Oddvalue\DbRouter;
 
+use Illuminate\Database\Eloquent\Model;
 use Oddvalue\DbRouter\Route;
 use Illuminate\Database\QueryException;
 use Oddvalue\DbRouter\Contracts\Routable;
@@ -14,8 +15,6 @@ class RouteManager
     /**
      * If the slug has changed then softdelete current path for self and all
      * descendants and insert new path for self and all descendants
-     *
-     * @param \Oddvalue\DbRouter\Contracts\Routable $instance
      */
     public function updateRoutes(Routable $instance): void
     {
@@ -30,7 +29,7 @@ class RouteManager
         $this->addRoutes($instance);
 
         if ($generator instanceof ChildRouteGenerator) {
-            $generator->getRouteChildren($instance)->map(function ($childInstance) {
+            $generator->getRouteChildren($instance)->map(function (Routable $childInstance): void {
                 $this->updateRoutes($childInstance);
             });
         }
@@ -52,7 +51,7 @@ class RouteManager
 
             $canonicalId = $this->createOrRestoreRoute($canonicalRouteString, $instance)->id;
 
-            $routes->each(function ($route) use ($instance, $canonicalId) {
+            $routes->each(function (string $route) use ($instance, $canonicalId): void {
                 $this->createOrRestoreRoute($route, $instance, $canonicalId);
             });
         } catch (QueryException $e) {
@@ -62,10 +61,10 @@ class RouteManager
 
     public function createOrRestoreRoute(string $routeString, Routable $instance, ?int $canonicalId = null): Route
     {
-        $type = get_class($instance);
+        $type = $instance::class;
         $type = Relation::getMorphedModel($type) ?? $type;
-        Route::onlyTrashed()->whereHasMorph('routable', $type, function ($query) use ($instance) {
-            /** @var \Illuminate\Database\Eloquent\Model&Routable $model */
+        Route::onlyTrashed()->whereHasMorph('routable', $type, function ($query) use ($instance): void {
+            /** @var Model&Routable $model */
             $model = $instance;
             $keyName = $model->/** @scrutinizer ignore-call */getKeyName();
             $query->where($keyName, $model->{$keyName});
@@ -90,7 +89,7 @@ class RouteManager
 
         $generator = $instance->getRouteGenerator();
         if ($generator instanceof ChildRouteGenerator) {
-            $generator->getRouteChildren($instance)->map(function ($childInstance) {
+            $generator->getRouteChildren($instance)->map(function (Routable $childInstance): void {
                 $this->deleteRoutes($childInstance);
             });
         }
@@ -98,10 +97,6 @@ class RouteManager
 
     /**
      * Create a redirect route
-     *
-     * @param string $url
-     * @param Route $route
-     * @return Route
      */
     public static function createRedirect(string $url, Route $route) : Route
     {

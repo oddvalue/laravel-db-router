@@ -3,8 +3,8 @@
 use Oddvalue\DbRouter\Route;
 use Oddvalue\DbRouter\Test\Models\Example;
 
-it('updates child routes when parent changes and cleans up on delete', function () {
-    $parentInstance = Example::create([
+it('updates child routes when parent changes and cleans up on delete', function (): void {
+    $parentInstance = Example::query()->create([
         'name' => 'Parent',
         'slug' => 'parent',
     ]);
@@ -27,5 +27,5 @@ it('updates child routes when parent changes and cleans up on delete', function 
     $parentInstance->delete();
 
     // deleting parent deletes child routes
-    expect(Route::count())->toBe(0);
+    expect(Route::query()->count())->toBe(0);
 });

@@ -2,6 +2,8 @@
 
 namespace Oddvalue\DbRouter;
 
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
@@ -23,14 +25,14 @@ class TestCase extends OrchestraTestCase
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param Application $app
      * @return void
      */
     protected function getEnvironmentSetUp($app)
     {
         // Setup default database to use sqlite :memory:
-        $app['config']->set('database.default', 'testing');
-        $app['config']->set('database.connections.testing', [
+        $app->make(Repository::class)->set('database.default', 'testing');
+        $app->make(Repository::class)->set('database.connections.testing', [
             'driver' => 'sqlite',
             'database' => ':memory:',
             'prefix' => '',
@@ -43,14 +45,14 @@ class TestCase extends OrchestraTestCase
      * In a normal app environment these would be added to the 'providers' array in
      * the config/app.php file.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param Application $app
      *
      * @return array
      */
     protected function getPackageProviders($app)
     {
         return [
-            \Oddvalue\DbRouter\DbRouterServiceProvider::class,
+            DbRouterServiceProvider::class,
         ];
     }
 }

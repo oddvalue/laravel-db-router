@@ -44,7 +44,3 @@ jobs:
         with:
           gist-id: 1b9a63d1adac98e446b9bb5b591d3e81
           token: ${{ secrets.GIST_TOKEN }}
-      - name: Code style
-        run: composer check-style
-      - name: Static analysis (PHPStan)
-        run: composer phpstan

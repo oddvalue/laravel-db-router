@@ -12,8 +12,6 @@ trait HasRoutes
 {
     /**
      * Boot the trait
-     *
-     * @return void
      */
     public static function bootHasRoutes(): void
     {
@@ -36,15 +34,11 @@ trait HasRoutes
 
     /**
      * Get the fully qualified class name of the model's route generator
-     *
-     * @return string
      */
     abstract public function getRouteGeneratorClass() : string;
 
     /**
      * Get the model's route generator
-     *
-     * @return \Oddvalue\DbRouter\Contracts\RouteGenerator
      */
     public function getRouteGenerator() : RouteGenerator
     {
@@ -55,8 +49,6 @@ trait HasRoutes
 
     /**
      * Relation to the canonical route for the model
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
     public function canonicalRoute() : MorphOne
     {
@@ -66,8 +58,6 @@ trait HasRoutes
 
     /**
      * Relation to all the model's routes
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function routes() : MorphMany
     {
@@ -76,8 +66,6 @@ trait HasRoutes
 
     /**
      * Relation to all the model's redirect routes
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function redirectRoutes() : MorphMany
     {

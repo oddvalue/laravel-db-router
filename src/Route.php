@@ -2,6 +2,11 @@
 
 namespace Oddvalue\DbRouter;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Support\Carbon;
+use Oddvalue\DbRouter\Contracts\Routable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -15,16 +20,17 @@ use Oddvalue\DbRouter\Exceptions\NoRedirectUrlException;
  * @property int|null $redirect_id
  * @property string|null $routable_type
  * @property int|null $routable_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read Route|null $canonical
  * @property-read Route|null $redirect
- * @property-read \Oddvalue\DbRouter\Contracts\Routable|null $routable
+ * @property-read Routable|null $routable
  * @property-read string $redirect_url
  */
 class Route extends Model
 {
+    use HasFactory;
     use SoftDeletes;
 
     /*
@@ -83,21 +89,22 @@ class Route extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
-
-    /** @param \Illuminate\Database\Eloquent\Builder<Route> $query */
-    public function scopeWhereIsCanonical($query): void
+    /** @param Builder<Route> $query */
+    #[Scope]
+    protected function whereIsCanonical($query): void
     {
         $query->whereNull('canonical_id');
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Builder<Route> $query
-     * @return \Illuminate\Database\Eloquent\Builder<Route>
+     * @param Builder<Route> $query
+     * @return Builder<Route>
      */
-    public function scopeIsRedirect($query)
+    #[Scope]
+    protected function isRedirect($query)
     {
-        return $query->where(function ($query) {
-            /** @var \Illuminate\Database\Eloquent\Builder<Route> $query */
+        return $query->where(function ($query): void {
+            /** @var Builder<Route> $query */
             $query->onlyTrashed();
             $query->orWhereNotNull('redirect_id');
         })->withTrashed();
@@ -109,7 +116,7 @@ class Route extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function setUrlAttribute(string $value): void
+    protected function setUrlAttribute(string $value): void
     {
         $this->attributes['url'] = $this->parseUrl($value);
     }
@@ -120,7 +127,7 @@ class Route extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function getRedirectUrlAttribute(): string
+    protected function getRedirectUrlAttribute(): string
     {
         if ($this->routable && $this->trashed()) {
             /** @var Route|null $canonicalRoute */

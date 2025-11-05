@@ -2,6 +2,7 @@
 
 namespace Oddvalue\DbRouter\Http\Controllers;
 
+use RuntimeException;
 use Illuminate\Routing\Controller;
 use Oddvalue\DbRouter\Contracts\Routable;
 use Oddvalue\DbRouter\Route;
@@ -23,9 +24,7 @@ class DbRouterController extends Controller
 
         $routableInstance = $route->routable;
 
-        if (!$routableInstance) {
-            abort(404, 'Route has no associated model');
-        }
+        abort_unless($routableInstance !== null, 404, 'Route has no associated model');
 
         $action = $this->getRouteAction($routableInstance);
 
@@ -45,9 +44,7 @@ class DbRouterController extends Controller
         $generator = $routableInstance->getRouteGenerator();
         $controller = app($generator->getRouteController($routableInstance));
 
-        if (!is_object($controller)) {
-            throw new \RuntimeException('Controller must be an object');
-        }
+        throw_unless(is_object($controller), RuntimeException::class, 'Controller must be an object');
 
         return [
             $controller,

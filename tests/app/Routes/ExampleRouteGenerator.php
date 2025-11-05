@@ -2,6 +2,7 @@
 
 namespace Oddvalue\DbRouter\Test\Routes;
 
+use Oddvalue\DbRouter\Test\Http\Controllers\ExampleController;
 use Illuminate\Support\Collection;
 use Oddvalue\DbRouter\RouteGenerator;
 use Oddvalue\DbRouter\Contracts\Routable;
@@ -32,7 +33,7 @@ class ExampleRouteGenerator extends RouteGenerator implements ChildRouteGenerato
 
     public function getRouteController(Routable $instance) : string
     {
-        return \Oddvalue\DbRouter\Test\Http\Controllers\ExampleController::class;
+        return ExampleController::class;
     }
 
     public function getRouteAction(Routable $instance) : string

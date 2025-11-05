@@ -2,6 +2,7 @@
 
 namespace Oddvalue\DbRouter\Test\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Oddvalue\DbRouter\Traits\HasRoutes;
 use Oddvalue\DbRouter\Contracts\Routable;
@@ -12,6 +13,7 @@ use Oddvalue\DbRouter\Test\Routes\ExampleRouteGenerator;
 
 class Example extends Model implements Routable
 {
+    use HasFactory;
     use HasRoutes;
     use LinkableTrait;
     use SoftDeletes;
@@ -50,15 +52,13 @@ class Example extends Model implements Routable
 
     /**
      * Get the fully qualified class name of the model's link generator
-     *
-     * @return string
      */
     protected function getLinkGeneratorClass(): string
     {
         return ExampleLink::class;
     }
 
-    public function setNonCanonicalRoutePrefix($value)
+    public function setNonCanonicalRoutePrefix($value): static
     {
         $this->non_canonical_route_prefix = $value;
         return $this;
