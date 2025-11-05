@@ -17,7 +17,7 @@ class RouteManager
      *
      * @param \Oddvalue\DbRouter\Contracts\Routable $instance
      */
-    public function updateRoutes(Routable $instance)
+    public function updateRoutes(Routable $instance): void
     {
         $this->deleteRoutes($instance);
 
@@ -39,12 +39,17 @@ class RouteManager
     /**
      * Create new Route OR restore old path if already exists
      */
-    public function addRoutes(Routable $instance)
+    public function addRoutes(Routable $instance): void
     {
         try {
             $routes = collect($instance->getRouteGenerator()->getRoutes($instance));
 
             $canonicalRouteString = $routes->shift();
+
+            if ($canonicalRouteString === null) {
+                return;
+            }
+
             $canonicalId = $this->createOrRestoreRoute($canonicalRouteString, $instance)->id;
 
             $routes->each(function ($route) use ($instance, $canonicalId) {
@@ -55,16 +60,19 @@ class RouteManager
         }
     }
 
-    public function createOrRestoreRoute(string $routeString, Routable $instance, int $canonicalId = null)
+    public function createOrRestoreRoute(string $routeString, Routable $instance, ?int $canonicalId = null): Route
     {
         $type = get_class($instance);
         $type = Relation::getMorphedModel($type) ?? $type;
         Route::onlyTrashed()->whereHasMorph('routable', $type, function ($query) use ($instance) {
-            $keyName = $instance->/** @scrutinizer ignore-call */getKeyName();
-            $query->where($keyName, $instance->{$keyName});
+            /** @var \Illuminate\Database\Eloquent\Model&Routable $model */
+            $model = $instance;
+            $keyName = $model->/** @scrutinizer ignore-call */getKeyName();
+            $query->where($keyName, $model->{$keyName});
         })->whereUrl($routeString)->forceDelete();
 
-        $path = $instance->routes()->withTrashed()->firstOrCreate([
+        $routes = $instance->routes();
+        $path = $routes->withTrashed()->firstOrCreate([
             'url' => $routeString,
             'canonical_id' => $canonicalId,
         ]);
@@ -76,7 +84,7 @@ class RouteManager
     /**
      * Delete existing Route instances for an entity
      */
-    public function deleteRoutes(Routable $instance)
+    public function deleteRoutes(Routable $instance): void
     {
         $instance->routes()->delete();
 
@@ -92,7 +100,7 @@ class RouteManager
      * Create a redirect route
      *
      * @param string $url
-     * @param self $route
+     * @param Route $route
      * @return Route
      */
     public static function createRedirect(string $url, Route $route) : Route

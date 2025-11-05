@@ -15,12 +15,12 @@ trait HasRoutes
      *
      * @return void
      */
-    public static function bootHasRoutes()
+    public static function bootHasRoutes(): void
     {
         /**
          * Update routes after instance is saved
          */
-        static::saved(function (Routable $model) {
+        static::saved(function (Routable $model): void {
             $manager = new RouteManager;
             $manager->updateRoutes($model);
         });
@@ -28,7 +28,7 @@ trait HasRoutes
         /**
          * Delete routes after instance is deleted
          */
-        static::deleted(function (Routable $model) {
+        static::deleted(function (Routable $model): void {
             $manager = new RouteManager;
             $manager->deleteRoutes($model);
         });
@@ -49,6 +49,7 @@ trait HasRoutes
     public function getRouteGenerator() : RouteGenerator
     {
         $generatorClass = $this->getRouteGeneratorClass();
+
         return new $generatorClass;
     }
 
@@ -59,7 +60,7 @@ trait HasRoutes
      */
     public function canonicalRoute() : MorphOne
     {
-        return $this->/** @scrutinizer ignore-call */morphOne(config('dbrouter.route_class'), 'routable')
+        return $this->morphOne(config('dbrouter.route_class'), 'routable')
             ->whereIsCanonical();
     }
 

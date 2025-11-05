@@ -10,7 +10,7 @@ interface RouteGenerator
      * Get all the urls that the instance should be accessible from
      *
      * @param \Oddvalue\DbRouter\Contracts\Routable $instance
-     * @return array
+     * @return array<int, string>
      */
     public function getRoutes(Routable $instance) : array;
 

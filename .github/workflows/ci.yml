@@ -46,3 +46,5 @@ jobs:
           token: ${{ secrets.GIST_TOKEN }}
       - name: Code style
         run: composer check-style
+      - name: Static analysis (PHPStan)
+        run: composer phpstan

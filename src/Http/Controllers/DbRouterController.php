@@ -2,18 +2,18 @@
 
 namespace Oddvalue\DbRouter\Http\Controllers;
 
-use Oddvalue\DbRouter\Route;
 use Illuminate\Routing\Controller;
 use Oddvalue\DbRouter\Contracts\Routable;
+use Oddvalue\DbRouter\Route;
 
 class DbRouterController extends Controller
 {
-    public function __invoke($url)
+    public function __invoke(string $url): mixed
     {
         return $this->resolveRoute("/$url");
     }
 
-    protected function resolveRoute($url)
+    protected function resolveRoute(string $url): mixed
     {
         $route = Route::whereUrl($url)->withTrashed()->firstOrFail();
 
@@ -22,24 +22,47 @@ class DbRouterController extends Controller
         }
 
         $routableInstance = $route->routable;
-        [$controller, $action] = $this->getRouteAction($routableInstance);
 
-        return app()->call([$controller, $action], [
-            'model' => $routableInstance,
-        ]);
+        if (!$routableInstance) {
+            abort(404, 'Route has no associated model');
+        }
+
+        $action = $this->getRouteAction($routableInstance);
+
+        return $this->callControllerAction($action, $routableInstance);
     }
 
-    protected function redirect($route)
+    protected function redirect(Route $route): mixed
     {
         return redirect($route->redirect_url, 301);
     }
 
-    protected function getRouteAction(Routable $routableInstance)
+    /**
+     * @return array{0: object, 1: string}
+     */
+    protected function getRouteAction(Routable $routableInstance): array
     {
         $generator = $routableInstance->getRouteGenerator();
+        $controller = app($generator->getRouteController($routableInstance));
+
+        if (!is_object($controller)) {
+            throw new \RuntimeException('Controller must be an object');
+        }
+
         return [
-            app($generator->getRouteController($routableInstance)),
+            $controller,
             $generator->getRouteAction($routableInstance),
         ];
+    }
+
+    /**
+     * @param array{0: object, 1: string} $callable
+     */
+    protected function callControllerAction(array $callable, Routable $model): mixed
+    {
+        /** @phpstan-ignore argument.type */
+        return app()->call($callable, [
+            'model' => $model,
+        ]);
     }
 }
