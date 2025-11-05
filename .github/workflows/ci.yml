@@ -69,7 +69,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
-          if git diff --quiet -- coverage/coverage.json 2>/dev/null; then
+          # Detect changes against HEAD so new/untracked files are seen
+          if git diff --quiet HEAD -- coverage/coverage.json 2>/dev/null; then
             echo "No coverage JSON changes to commit."
             exit 0
           fi
