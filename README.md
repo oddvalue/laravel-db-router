@@ -104,7 +104,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
 [ico-ci]: https://github.com/oddvalue/laravel-db-router/actions/workflows/ci.yml/badge.svg
 [ico-downloads]: https://img.shields.io/packagist/dt/oddvalue/laravel-db-router.svg?style=flat-square
-[ico-coverage]: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/oddvalue/1b9a63d1adac98e446b9bb5b591d3e81/raw/95b3d3b66589d2625d205551c93b1dcf71ae4896/laravel-deb-router-coverage.json
+[ico-coverage]: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/oddvalue/1b9a63d1adac98e446b9bb5b591d3e81/raw/fdb20b6603b28282412ad226f848dc3f0afb4c32/laravel-db-router-cobertura-coverage.json
 
 [link-packagist]: https://packagist.org/packages/oddvalue/laravel-db-router
 [link-ci]: https://github.com/oddvalue/laravel-db-router/actions/workflows/ci.yml
