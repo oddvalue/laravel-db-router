@@ -1,5 +1,8 @@
 <?php
 
+use Oddvalue\DbRouter\Http\Controllers\DbRouterController;
+use Illuminate\Support\Facades\Route;
+
 if (config('dbrouter.setup_catchall_route')) {
-    Route::get('{url}', 'Oddvalue\DbRouter\Http\Controllers\DbRouterController')->where('url', '.*');
+    Route::get('{url}', DbRouterController::class)->where('url', '.*');
 }

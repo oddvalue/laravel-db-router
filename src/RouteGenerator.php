@@ -7,6 +7,9 @@ use Oddvalue\DbRouter\Contracts\RouteGenerator as RouteGeneratorContract;
 
 abstract class RouteGenerator implements RouteGeneratorContract
 {
+    /**
+     * @return array<int, string>
+     */
     public function getRoutes(Routable $instance) : array
     {
         return [$instance->getLinkGenerator()->href()];

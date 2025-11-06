@@ -7,8 +7,8 @@ use Oddvalue\DbRouter\Route;
 
 class NoRedirectUrlException extends Exception
 {
-    public static function forRoute(Route $route)
+    public static function forRoute(Route $route): self
     {
-        return new static("Route #{$route->id} has no redirect URL.");
+        return new self("Route #{$route->id} has no redirect URL.");
     }
 }
